@@ -1,0 +1,2 @@
+# trol-web-client
+Web client for El Trol Versátil. This will be run in a backend server, serving a frontend website where potential clients can step-by-step design and purchase services from a custom net of twitter bots that will fit their needs of boosting specific tweets or threads with their interactions. It allows for custom behavior, speech register, aggressivity, political inclinations, along with a custom avatar and description that fits a given sex, age and ethnical profile.
