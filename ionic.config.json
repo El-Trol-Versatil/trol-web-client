@@ -1,0 +1,7 @@
+{
+  "name": "trol-web-client",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
