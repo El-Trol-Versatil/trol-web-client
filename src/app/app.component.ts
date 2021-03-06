@@ -6,12 +6,36 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
+    {
+      title: 'New trollnet',
+      url: '/create',
+      icon: 'color-palette',
+      description: 'Create a new net of troll bots',
+    },
+    {
+      title: 'My trollnets',
+      url: '/gallery',
+      icon: 'construct',
+      description: 'Manage your trollnets',
+    },
+    {
+      title: 'Profile',
+      url: '/profile',
+      icon: 'person',
+      description: 'Customize your profile details',
+    },
+    {
+      title: 'Payment',
+      url: '/payment',
+      icon: 'cash',
+      description: 'Manage payments and payment history',
+    },
+    {
+      title: 'Settings',
+      url: '/settings',
+      icon: 'settings',
+      description: 'App settings and notifications',
+    },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
   constructor() {}
