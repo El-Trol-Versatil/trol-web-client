@@ -9,27 +9,23 @@ const routes: Routes = [
   },
   {
     path: 'payment',
-    loadChildren: () => import('./payment/payment.module').then( m => m.PaymentPageModule)
+    loadChildren: () => import('./pages/payment/payment.module').then( m => m.PaymentPageModule)
   },
   {
     path: 'profile',
-    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+    loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule)
   },
   {
     path: 'settings',
-    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
+    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule)
   },
   {
     path: 'gallery',
-    loadChildren: () => import('./gallery/gallery.module').then( m => m.GalleryPageModule)
+    loadChildren: () => import('./pages/gallery/gallery.module').then( m => m.GalleryPageModule)
   },
   {
     path: 'create',
-    loadChildren: () => import('./create/create.module').then( m => m.CreatePageModule)
-  },
-  {
-    path: 'edit',
-    loadChildren: () => import('./edit/edit.module').then( m => m.EditPageModule)
+    loadChildren: () => import('./pages/create/create.module').then( m => m.CreatePageModule)
   }
 ];
 

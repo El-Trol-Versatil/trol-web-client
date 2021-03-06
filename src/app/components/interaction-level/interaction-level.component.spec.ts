@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { EditPage } from './edit.page';
+import { InteractionLevelComponent } from './interaction-level.component';
 
-describe('EditPage', () => {
-  let component: EditPage;
-  let fixture: ComponentFixture<EditPage>;
+describe('InteractionLevelComponent', () => {
+  let component: InteractionLevelComponent;
+  let fixture: ComponentFixture<InteractionLevelComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditPage ],
+      declarations: [ InteractionLevelComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EditPage);
+    fixture = TestBed.createComponent(InteractionLevelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
