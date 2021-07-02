@@ -8,6 +8,8 @@ import { GalleryPageRoutingModule } from './gallery-routing.module';
 
 import { GalleryPage } from './gallery.page';
 
+import { KeywordsComponent } from '../../components/keywords/keywords.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +17,9 @@ import { GalleryPage } from './gallery.page';
     IonicModule,
     GalleryPageRoutingModule
   ],
-  declarations: [GalleryPage]
+  declarations: [
+    GalleryPage,
+    KeywordsComponent,
+  ]
 })
 export class GalleryPageModule {}

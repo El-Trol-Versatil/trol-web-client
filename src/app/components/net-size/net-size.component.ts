@@ -1,14 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-net-size',
   templateUrl: './net-size.component.html',
   styleUrls: ['./net-size.component.scss'],
 })
-export class NetSizeComponent implements OnInit {
+export class NetSizeComponent {
 
-  constructor() { }
+  @Input() set netsizeInput(netsize: any) {
+    this.netSizeValues = netsize;
+    this.updateForm(netsize.value);
 
-  ngOnInit() {}
+  };
 
+  public netSize: number;
+  private netSizeValues: any;
+
+  constructor() {
+  }
+
+  updateForm(value: number) {
+    this.netSize = value;
+  }
+
+  onRangeChange() {
+    this.netSizeValues.value = this.netSize;
+  }
 }

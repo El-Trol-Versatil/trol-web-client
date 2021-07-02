@@ -1,3 +1,11 @@
-<p>
-  net-size works!
-</p>
+<ion-list>
+  <ion-label position="stacked">Size of your net</ion-label>
+  <ion-range min="5" max="50" step="5"
+    snaps="true" ticks="false" pin="true"
+    [(ngModel)]="netSize" (ionChange)="onRangeChange()">
+    <ion-icon slot="start" size="large" color="primary" name="person-circle-outline"></ion-icon>
+    <ion-label slot="start" color="primary">5</ion-label>
+    <ion-label slot="end" color="primary">50</ion-label>
+    <ion-icon slot="end" size="large" color="primary" name="people-circle-outline"></ion-icon>
+  </ion-range>
+</ion-list>

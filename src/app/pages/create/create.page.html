@@ -5,5 +5,52 @@
 </ion-header>
 
 <ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4">
+        <app-gender-selector [genderInput]="draftNet.genders"></app-gender-selector>
+        <app-age-selector [ageIntervalInput]="draftNet.ageInterval"></app-age-selector>
+      </ion-col>
+      <ion-col size="4">
+        <app-ethnicity-selector [ethnicityInput]="draftNet.ethnicity"></app-ethnicity-selector>
+      </ion-col>
+      <ion-col size="4">
+        <app-cultural-level [culturalLevelInput]="draftNet.culturalLevel"></app-cultural-level>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+      </ion-col>
+      <ion-col size="6">
+        <app-mood-selector [moodLevelInput]="draftNet.moodLevel"></app-mood-selector>
+      </ion-col>
+    </ion-row>
+    <app-keywords [keywordsInput]="draftNet.keywords"></app-keywords>
+    <ion-row>
+      <ion-col size="6">
+        <app-net-size [netsizeInput]="draftNet.netsize"></app-net-size>
+      </ion-col>
+      <ion-col size="6">
+        <app-interaction-level [interactionLevelInput]="draftNet.interactionLevel"></app-interaction-level>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <app-target-selector [targetSelectionInput]="draftNet.targetSelection"></app-target-selector>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
+  <ion-button color="warning" (click)="setNewDraft()">
+    <ion-label>Clear</ion-label>
+    <ion-icon name="close"></ion-icon>
+  </ion-button>
+  <ion-button color="light" (click)="setDefaultDraft()">
+    <ion-label>Default example</ion-label>
+    <ion-icon name="bug"></ion-icon>
+  </ion-button>
+  <ion-button color="primary" (click)="createNet()">
+    <ion-label>Create trollnet</ion-label>
+    <ion-icon size="large" name="checkmark-circle-outline"></ion-icon>
+  </ion-button>
 </ion-content>
