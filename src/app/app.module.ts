@@ -4,6 +4,13 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
+//Services
+import { LoadingService } from './services/loading.service';
+import { ToastService } from './services/toast.service';
+import { AlertService } from './services/alert.service';
+// import { LoggerService } from './services/logger.service';
+// import { StorageService } from './services/storage.service';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -11,7 +18,16 @@ import { AppRoutingModule } from './app-routing.module';
   declarations: [AppComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+
+    //Singleton services
+    LoadingService,
+    ToastService,
+    AlertService,
+    // LoggerService,
+    // StorageService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

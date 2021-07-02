@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 // import { TrollnetStore } from '../../stores/trollnet.store';
-// import { LoadingService } from '../../services/loading.service';
-// import { ToastService } from '../../services/toast.service';
+import { LoadingService } from '../../services/loading.service';
+import { ToastService } from '../../services/toast.service';
+import { AlertService } from '../../services/alert.service';
+// import { LoggerService } from '../../services/logger.service';
+// import { StorageService } from '../../services/storage.service';
 
 // import { TrollnetDraftModel } from '../../core/model/trollnet.model';
 
@@ -17,12 +20,15 @@ export class CreatePage implements OnInit {
 
   /**
    * Trollnet creation page constructor.
-  //  * @param trollnetStore Store for handling trollnets
-  //  * @param loadingService Service used to generate a loading dialog
-  //  * @param toastService Service used to show toasts.
+   * @param trollnetStore Store for handling trollnets
+   * @param loadingService Service used to generate a loading dialog
+   * @param alertService Service used to show toasts
+   * @param loggerService Service used to generate a loading dialog
+   * @param storageService Service used to show toasts
    */
   // constructor(private trollnetStore: TrollnetStore, private loadingService: LoadingService, private toastService: ToastService) {
-    constructor() {
+  // constructor(private loadingService: LoadingService, private toastService: ToastService, private alertService: AlertService, private loggerService: LoggerService, private storageService: StorageService) {
+    constructor(private loadingService: LoadingService, private toastService: ToastService, private alertService: AlertService) {
     }
 
   ngOnInit() {
@@ -98,6 +104,35 @@ export class CreatePage implements OnInit {
   }
 
   createNet(): void {
+    this.loadingService.show({
+      message: 'Linking... Be patient. Compilation and upload could take a couple minutes.',
+      duration: 15000,
+    });
+    this.alertService.showAlert({
+      header: 'Rename the room',
+      subHeader: 'Rename the room 2',
+      message: `Give the room A a new name:`,
+      inputs: [
+        {
+          id: 'name',
+          name: 'name',
+          placeholder: 'New room name',
+          value: 5
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Rename',
+          handler: data => {
+            this.toastService.showToast({message: 'Failed to turn ON main light'});
+          }
+        }
+      ]
+    });
+
     // this.trollnetStore.createNewTrollnet(this.draftNet).then(
     //   () => this.toastService.showToast({ message: `Trollnet '${this.draftNet.customName}' successfully created.` }),
     //   error => this.toastService.showToast({ message: error })
