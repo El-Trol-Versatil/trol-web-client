@@ -9,11 +9,8 @@ import { ApiErrorNotFound } from './api-error/api-error-not-found';
 import { ApiErrorTimeOut } from './api-error/api-error-time-out';
 
 //RXJS
-import { Observable } from 'rxjs';
-import { TimeoutError } from 'rxjs';
+import { Observable, TimeoutError, lastValueFrom, throwError } from 'rxjs';
 import { timeout, catchError } from 'rxjs/operators';
-import 'rxjs/add/operator/toPromise';
-import 'rxjs/add/observable/throw';
 
 // Constants
 import { API_CONSTANTS } from '../core/constants/api.constants';
@@ -51,13 +48,14 @@ export class ApiGenericProvider {
    * @param id Unique value from the object it wants to be retrieved.
    * @returns Promise that if resolved, will return call response.
    */
-  protected get(endpoint: string, id?: string): Promise<any> {
+  protected async get(endpoint: string, id?: string): Promise<any> {
     const headers: HttpHeaders = new HttpHeaders(this.headers);
-    return this.http.get(id? `${this.url}${endpoint}/${encodeURIComponent(id)}`:`${this.url}${endpoint}`, { headers })
+    const response = this.http.get(id? `${this.url}${endpoint}/${encodeURIComponent(id)}`:`${this.url}${endpoint}`, { headers })
       .pipe(
         timeout(10000),
         catchError((err) => this.handleError(err))
-      ).toPromise();
+      );
+      await lastValueFrom(response);
   }
 
   /**
@@ -67,13 +65,14 @@ export class ApiGenericProvider {
    * @param id Unique value from the object it wants to be retrieved.
    * @returns Promise that if resolved, will return call response.
    */
-  protected create(endpoint: string, resource: any, id?: string): Promise<any> {
-    const headers: HttpHeaders = new HttpHeaders(this.headers);
-    return this.http.post(id? `${this.url}${endpoint}/${encodeURIComponent(id)}`:`${this.url}${endpoint}`, JSON.stringify(resource),  { headers })
+  protected async create(endpoint: string, resource: any, id?: string): Promise<any> {
+    const headers: HttpHeaders = new HttpHeaders(this.headers),
+      response = this.http.post(id? `${this.url}${endpoint}/${encodeURIComponent(id)}`:`${this.url}${endpoint}`, JSON.stringify(resource),  { headers })
       .pipe(
         timeout(10000),
         catchError((err) => this.handleError(err))
-      ).toPromise();
+      );
+      await lastValueFrom(response);
   }
 
   /**
@@ -83,13 +82,14 @@ export class ApiGenericProvider {
    * @param id Unique value from the object it wants to be retrieved.
    * @returns Promise that if resolved, will return call response.
    */
-  protected update(endpoint: string, resource: any, id?: string): Promise<any> {
-    const headers: HttpHeaders = new HttpHeaders(this.headers);
-    return this.http.put(id? `${this.url}${endpoint}/${encodeURIComponent(id)}`:`${this.url}${endpoint}`, JSON.stringify(resource),  { headers })
+  protected async update(endpoint: string, resource: any, id?: string): Promise<any> {
+    const headers: HttpHeaders = new HttpHeaders(this.headers),
+      response = this.http.put(id? `${this.url}${endpoint}/${encodeURIComponent(id)}`:`${this.url}${endpoint}`, JSON.stringify(resource),  { headers })
       .pipe(
         timeout(10000),
         catchError((err) => this.handleError(err))
-      ).toPromise();
+      );
+      await lastValueFrom(response);
   }
 
   /**
@@ -98,13 +98,14 @@ export class ApiGenericProvider {
    * @param id Unique value from the object specified.
    * @returns Promise that if resolved, will return call response.
    */
-  protected delete(endpoint: string, id: string): Promise<any> {
-    const headers: HttpHeaders = new HttpHeaders(this.headers);
-    return this.http.delete(`${this.url}${endpoint}/${encodeURIComponent(id)}`,  { headers })
+  protected async delete(endpoint: string, id: string): Promise<any> {
+    const headers: HttpHeaders = new HttpHeaders(this.headers),
+      response = this.http.delete(`${this.url}${endpoint}/${encodeURIComponent(id)}`,  { headers })
       .pipe(
         timeout(10000),
         catchError((err) => this.handleError(err))
-      ).toPromise();
+      );
+      await lastValueFrom(response);
   }
 
   /**
@@ -113,13 +114,13 @@ export class ApiGenericProvider {
    */
   private handleError(error: Response): Observable<any> {
     if (error instanceof TimeoutError) {
-      return Observable.throw(new ApiErrorTimeOut());
+      return throwError(new ApiErrorTimeOut());
     } else if (error.status === 400) {
-      return Observable.throw(new ApiErrorBadInput(error.json()));
+      return throwError(new ApiErrorBadInput(error.json()));
     } else if (error.status === 404) {
-      return Observable.throw(new ApiErrorNotFound());
+      return throwError(new ApiErrorNotFound());
     } else {
-      return Observable.throw(new ApiError(error));
+      return throwError(new ApiError(error));
     }
   }
 
