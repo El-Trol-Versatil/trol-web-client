@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingService } from '../../services/loading.service';
 import { ToastService } from '../../services/toast.service';
 import { AlertService } from '../../services/alert.service';
-// import { LoggerService } from '../../services/logger.service';
 // import { StorageService } from '../../services/storage.service';
 
 // import { TrollnetDraftModel } from '../../core/model/trollnet.model';
@@ -23,11 +22,10 @@ export class CreatePage implements OnInit {
    * @param trollnetStore Store for handling trollnets
    * @param loadingService Service used to generate a loading dialog
    * @param alertService Service used to show toasts
-   * @param loggerService Service used to generate a loading dialog
    * @param storageService Service used to show toasts
    */
   // constructor(private trollnetStore: TrollnetStore, private loadingService: LoadingService, private toastService: ToastService) {
-  // constructor(private loadingService: LoadingService, private toastService: ToastService, private alertService: AlertService, private loggerService: LoggerService, private storageService: StorageService) {
+  // constructor(private loadingService: LoadingService, private toastService: ToastService, private alertService: AlertService, private storageService: StorageService) {
     constructor(private loadingService: LoadingService, private toastService: ToastService, private alertService: AlertService) {
     }
 
