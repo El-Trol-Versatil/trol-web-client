@@ -1,3 +1,11 @@
-<p>
-  age-selector works!
-</p>
+<ion-list>
+  <ion-label>Age range selection</ion-label>
+  <ion-range min="18" max="100" step="1"
+    snaps="true" ticks="false" dualKnobs="true"
+    [(ngModel)]="dualRange" (ionChange)="onRangeChange()">
+    <ion-icon size="small" slot="start" color="secondary" name="accessibility-sharp"></ion-icon>
+    <ion-label slot="start">{{dualRange.lower}}</ion-label>
+    <ion-label slot="end">{{dualRange.upper}}</ion-label>
+    <ion-icon slot="end" color="tertiary" name="walk-outline"></ion-icon>
+  </ion-range>
+</ion-list>

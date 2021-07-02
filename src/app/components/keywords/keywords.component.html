@@ -1,3 +1,29 @@
-<p>
-  keywords works!
-</p>
+<ion-label position="stacked">Describe your trolls with some keywords (15 max.)</ion-label>
+<ion-row>
+  <ion-col size="3">
+    <ion-item>
+      <ion-input
+        type=text
+        color="primary"
+        placeholder="Your keyword here"
+        [(ngModel)]="keywordInput"
+        (keypress)="onInputKeyPressed($event.keyCode)">
+      </ion-input>
+      <ion-button color="primary" item-right (click)="enterInputValue()">
+        <ion-icon size="large"  name="add"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-col>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6 col-md-4 col-lg-3 *ngFor="let entry of keywordsList">
+        <ion-item>
+          <ion-label>{{entry}}</ion-label>
+          <ion-button color="light" item-right (click)="removeKeyword(entry)">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-row>

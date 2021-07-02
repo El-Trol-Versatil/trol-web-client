@@ -1,0 +1,7 @@
+<ion-list>
+  <ion-label>Apparent gender</ion-label>
+  <ion-item *ngFor="let entry of form, let i = index">
+    <ion-label>{{entry.text}}</ion-label>
+    <ion-checkbox slot="end" [(ngModel)]="entry.isChecked" (ionChange)="onFormChange(i)"></ion-checkbox>
+  </ion-item>
+</ion-list>

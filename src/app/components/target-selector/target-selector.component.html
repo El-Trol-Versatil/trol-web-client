@@ -1,3 +1,49 @@
-<p>
-  target-selector works!
-</p>
+<ion-label position="stacked">Hashtag and profile targets (6 max. each)</ion-label>
+<ion-row>
+  <ion-col size="3">
+    <ion-item>
+      <ion-input
+        type=text
+        color="success"
+        placeholder="Target Profile"
+        [(ngModel)]="profileInput"
+        (keypress)="onProfileInputKeyPressed($event.keyCode)">
+      </ion-input>
+      <ion-button color="success" item-right (click)="enterProfileInputValue()">
+        <ion-icon size="large" name="add"></ion-icon>
+      </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-input
+        type=text
+        color="secondary"
+        placeholder="Target Hashtag"
+        [(ngModel)]="hashtagInput"
+        (keypress)="onHashtagInputKeyPressed($event.keyCode)">
+      </ion-input>
+      <ion-button color="secondary" item-right (click)="enterHashtagInputValue()">
+        <ion-icon size="large" name="add"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-col>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6 col-md-4 col-lg-3>
+        <ion-item color="success" *ngFor="let entry of profileList">
+          <ion-label>@{{entry}}</ion-label>
+          <ion-button color="success" item-right (click)="removeProfile(entry)">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-col>
+      <ion-col col-6 col-md-4 col-lg-3>
+        <ion-item color="secondary" *ngFor="let entry of hashtagList">
+          <ion-label>#{{entry}}</ion-label>
+          <ion-button color="secondary" item-right (click)="removeHashtag(entry)">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-row>
