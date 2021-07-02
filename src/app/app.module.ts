@@ -8,7 +8,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { LoadingService } from './services/loading.service';
 import { ToastService } from './services/toast.service';
 import { AlertService } from './services/alert.service';
-// import { StorageService } from './services/storage.service';
+import { StorageService } from './services/storage.service';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -24,7 +24,7 @@ import { AppRoutingModule } from './app-routing.module';
     LoadingService,
     ToastService,
     AlertService,
-    // StorageService,
+    StorageService,
   ],
   bootstrap: [AppComponent],
 })
