@@ -1,6 +1,6 @@
 //Basic
 import { Injectable } from '@angular/core';
-import { Storage, StorageConfig } from '@ionic/storage';
+import { Storage, StorageConfig } from '@ionic/storage-angular';
 
 //Constants
 import { SECRET } from '../core/constants/storage.constants';
@@ -23,8 +23,10 @@ export class StorageService {
    * Method to create a new database with a custom configuration.
    * @param config Database configuration.
    */
-  public create(config: StorageConfig): Storage {
-    return new Storage(config);
+  public async create(config: StorageConfig): Promise<Storage> {
+    const storageEntity = new Storage(config);
+    const storage = await storageEntity.create();
+    return storage;
   }
 
   /**
@@ -33,8 +35,9 @@ export class StorageService {
    * @param encryption if the database has encryption.
    * @param key Primary key to get the value inside the database.
    */
-  public get(storage: Storage, encryption: boolean, key: string): Promise<any> {
-    return this._get(storage, encryption, key);
+  public async get(storage: Storage, encryption: boolean, key: string): Promise<any> {
+    console.log('this._get(storage, encryption, key);');
+    await this._get(storage, encryption, key);
   }
 
   /**
@@ -44,11 +47,12 @@ export class StorageService {
    * @param key Primary key to be stored inside the database.
    * @param value Value to be stored inside the database
    */
-  public set(storage: Storage, encryption: boolean, key: string, value: any): Promise<any> {
+  public async set(storage: Storage, encryption: boolean, key: string, value: any): Promise<any> {
+    console.log('storage.set...');
     if (encryption) { //If database is encrypted...
-      return storage.set(key, AES.encrypt(JSON.stringify(value), SECRET).toString());
+      await storage.set(key, AES.encrypt(JSON.stringify(value), SECRET).toString());
     } else {
-      return storage.set(key, value);
+      await storage.set(key, value);
     }
   }
 
@@ -57,8 +61,9 @@ export class StorageService {
    * @param storage storage instance
    * @param encryption if the database has encryption.
    */
-  public getAll(storage: Storage, encryption: boolean): Promise<any> {
-    return storage.keys().then(keys => Promise.all(keys.map(k => this._get(storage, encryption, k))));
+  public async getAll(storage: Storage, encryption: boolean): Promise<any> {
+    const keys = await storage.keys().then(keys => Promise.all(keys.map(k => this._get(storage, encryption, k))));
+    return keys;
   }
 
   /**
@@ -66,16 +71,16 @@ export class StorageService {
    * @param storage storage instance
    * @param key Primary key to delete the value
    */
-  public remove(storage: Storage, key: string): Promise<any> {
-    return storage.remove(key);
+  public async remove(storage: Storage, key: string): Promise<any> {
+    await storage.remove(key);
   }
 
   /**
    * remoove all the storage.
    * @param storage storage instance.
    */
-  public removeAll(storage: Storage): Promise<any> {
-    return storage.clear();
+  public async removeAll(storage: Storage): Promise<any> {
+    await storage.clear();
   }
 
   /**

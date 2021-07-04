@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-// import { TrollnetStore } from '../../stores/trollnet.store';
+import { TrollnetStore } from '../../stores/trollnet.store';
 import { LoadingService } from '../../services/loading.service';
 import { ToastService } from '../../services/toast.service';
 import { AlertService } from '../../services/alert.service';
 import { StorageService } from '../../services/storage.service';
 import { TrollnetService } from '../../api/trollnet.service';
 
-// import { TrollnetDraftModel } from '../../core/model/trollnet.model';
+import { TrollnetDraftModel } from '../../core/model/trollnet.model';
 
 @Component({
   selector: 'app-create',
@@ -16,7 +16,7 @@ import { TrollnetService } from '../../api/trollnet.service';
 })
 export class CreatePage implements OnInit {
 
-  public draftNet: any;
+  public draftNet: TrollnetDraftModel;
 
   /**
    * Trollnet creation page constructor.
@@ -26,8 +26,8 @@ export class CreatePage implements OnInit {
    * @param storageService Service used to show toasts
    * @param trollnetApiService Service used to show toasts
    */
-  // constructor(private trollnetStore: TrollnetStore, private loadingService: LoadingService, private toastService: ToastService) {
-    constructor(private loadingService: LoadingService, private toastService: ToastService, private alertService: AlertService, private storageService: StorageService, private trollnetApiService: TrollnetService) {
+    constructor(private trollnetStore: TrollnetStore, private loadingService: LoadingService, private toastService: ToastService,
+      private alertService: AlertService, private storageService: StorageService, private trollnetApiService: TrollnetService) {
     }
 
   ngOnInit() {
@@ -102,21 +102,16 @@ export class CreatePage implements OnInit {
     };
   }
 
-  createNet(): void {
-    this.loadingService.show({
-      message: 'Linking... Be patient. Compilation and upload could take a couple minutes.',
-      duration: 15000,
-    });
+  nameItAndCreateNet(): void {
     this.alertService.showAlert({
-      header: 'Rename the room',
-      subHeader: 'Rename the room 2',
-      message: `Give the room A a new name:`,
+      header: 'Give it a name!',
+      message: `You will identify your trollnet by this name.`,
       inputs: [
         {
           id: 'name',
           name: 'name',
-          placeholder: 'New room name',
-          value: 5
+          placeholder: 'New trollnet name',
+          value: this.draftNet.customName,
         },
       ],
       buttons: [
@@ -124,22 +119,30 @@ export class CreatePage implements OnInit {
           text: 'Cancel'
         },
         {
-          text: 'Rename',
+          text: 'Create',
           handler: data => {
-            this.trollnetApiService.renameTrollnet('11111', 'Trolasos').then(() => {
-                this.toastService.showToast({message: 'Success calling trollnetApiService.renameTrollnet'});
-              }).catch(() => {
-                this.toastService.showToast({message: 'Failure calling trollnetApiService.renameTrollnet'});
-              });
+            this.draftNet.customName = data['name'];
+            this.createNet();
           }
         }
       ]
     });
+  }
 
-    // this.trollnetStore.createNewTrollnet(this.draftNet).then(
-    //   () => this.toastService.showToast({ message: `Trollnet '${this.draftNet.customName}' successfully created.` }),
-    //   error => this.toastService.showToast({ message: error })
-    // );
+  createNet(): void {
+    this.loadingService.show({
+      message: 'Creating...',
+    });
+    this.trollnetStore.createNewTrollnet(this.draftNet).then(
+      () => {
+        this.loadingService.dismiss();
+        this.toastService.showToast({ message: `Trollnet '${this.draftNet.customName}' successfully created.` });
+      },
+      error => {
+        this.loadingService.dismiss();
+        this.toastService.showToast({ message: `Failed to create '${this.draftNet.customName}' trollnet.` });
+      },
+    );
   }
 
 }
