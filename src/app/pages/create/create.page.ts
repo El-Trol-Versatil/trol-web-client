@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-// import { TrollnetStore } from '../../stores/trollnet.store';
-// import { LoadingService } from '../../services/loading.service';
-// import { ToastService } from '../../services/toast.service';
+import { TrollnetStore } from '../../stores/trollnet.store';
+import { LoadingService } from '../../services/loading.service';
+import { ToastService } from '../../services/toast.service';
+import { AlertService } from '../../services/alert.service';
+import { StorageService } from '../../services/storage.service';
+import { TrollnetService } from '../../api/trollnet.service';
 
-// import { TrollnetDraftModel } from '../../core/model/trollnet.model';
+import { TrollnetDraftModel } from '../../core/model/trollnet.model';
 
 @Component({
   selector: 'app-create',
@@ -13,16 +16,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreatePage implements OnInit {
 
-  public draftNet: any;
+  public draftNet: TrollnetDraftModel;
 
   /**
    * Trollnet creation page constructor.
-  //  * @param trollnetStore Store for handling trollnets
-  //  * @param loadingService Service used to generate a loading dialog
-  //  * @param toastService Service used to show toasts.
+   * @param trollnetStore Store for handling trollnets
+   * @param loadingService Service used to generate a loading dialog
+   * @param alertService Service used to show toasts
+   * @param storageService Service used to show toasts
+   * @param trollnetApiService Service used to show toasts
    */
-  // constructor(private trollnetStore: TrollnetStore, private loadingService: LoadingService, private toastService: ToastService) {
-    constructor() {
+    constructor(private trollnetStore: TrollnetStore, private loadingService: LoadingService, private toastService: ToastService,
+      private alertService: AlertService, private storageService: StorageService, private trollnetApiService: TrollnetService) {
     }
 
   ngOnInit() {
@@ -97,11 +102,47 @@ export class CreatePage implements OnInit {
     };
   }
 
+  nameItAndCreateNet(): void {
+    this.alertService.showAlert({
+      header: 'Give it a name!',
+      message: `You will identify your trollnet by this name.`,
+      inputs: [
+        {
+          id: 'name',
+          name: 'name',
+          placeholder: 'New trollnet name',
+          value: this.draftNet.customName,
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Create',
+          handler: data => {
+            this.draftNet.customName = data['name'];
+            this.createNet();
+          }
+        }
+      ]
+    });
+  }
+
   createNet(): void {
-    // this.trollnetStore.createNewTrollnet(this.draftNet).then(
-    //   () => this.toastService.showToast({ message: `Trollnet '${this.draftNet.customName}' successfully created.` }),
-    //   error => this.toastService.showToast({ message: error })
-    // );
+    this.loadingService.show({
+      message: 'Creating...',
+    });
+    this.trollnetStore.createNewTrollnet(this.draftNet).then(
+      () => {
+        this.loadingService.dismiss();
+        this.toastService.showToast({ message: `Trollnet '${this.draftNet.customName}' successfully created.` });
+      },
+      error => {
+        this.loadingService.dismiss();
+        this.toastService.showToast({ message: `Failed to create '${this.draftNet.customName}' trollnet.` });
+      },
+    );
   }
 
 }

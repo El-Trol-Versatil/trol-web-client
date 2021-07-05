@@ -8,7 +8,9 @@ import { GalleryPageRoutingModule } from './gallery-routing.module';
 
 import { GalleryPage } from './gallery.page';
 
+//Components
 import { KeywordsComponent } from '../../components/keywords/keywords.component';
+import { TrollnetPreviewComponent } from '../../components/trollnet-preview/trollnet-preview.component';
 
 @NgModule({
   imports: [
@@ -20,6 +22,7 @@ import { KeywordsComponent } from '../../components/keywords/keywords.component'
   declarations: [
     GalleryPage,
     KeywordsComponent,
+    TrollnetPreviewComponent,
   ]
 })
 export class GalleryPageModule {}
