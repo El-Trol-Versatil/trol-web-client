@@ -1,0 +1,34 @@
+<ion-card style="margin: 4px;" (click)="editTrollnet()">
+  <div class="trollnet-image-background">
+    <div class="trollnet-display"
+      [ngClass]="{'activated': actuallyActivated}">
+      <ion-row padding text-wrap style="height: 35px;">
+        <div class="trollnet-title">{{!!trollnet && trollnet.properties.customName}}</div>
+      </ion-row>
+      <ion-row padding-left class="activeStatus">
+        <ion-toggle
+          toggle-class="toggle-energized"
+          [(ngModel)]="activeStatusOn"
+          (ngModelChange)="toggleTrollnetActiveStatus($event)"
+          [disabled]="interactionDisabled">
+        </ion-toggle>
+      </ion-row>
+      <ion-row padding-horizontal class="info1">
+        <ion-col text-left padding-left>
+          1ºC
+        </ion-col>
+        <ion-col text-right padding-right>
+          <ion-icon name="icon-info1"></ion-icon>
+        </ion-col>
+      </ion-row>
+      <ion-row padding-horizontal class="info2">
+        <ion-col text-left padding-left>
+          2%
+        </ion-col>
+        <ion-col text-right padding-right>
+          <ion-icon name="icon-info2"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+</ion-card>
