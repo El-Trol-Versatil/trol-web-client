@@ -32,8 +32,8 @@ export class TrollnetService extends ApiGenericProvider {
         (response: TrollnetModel[]) => {
           resolve(response);
         }, (error) => {
-          // reject(error);
-          resolve(this.getMockTrollnets());
+          reject(error);
+          // resolve(this.getMockTrollnets());
         }
       );
     });
