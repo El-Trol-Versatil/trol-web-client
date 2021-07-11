@@ -13,7 +13,7 @@ import { Observable, TimeoutError, lastValueFrom, throwError } from 'rxjs';
 import { timeout, catchError } from 'rxjs/operators';
 
 // Constants
-import { API_CONSTANTS } from '../core/constants/api.constants';
+import { API_CONSTANTS, BACKEND_CONFIG } from '../core/constants/api.constants';
 
 /**
  * Generic class for API management
@@ -39,7 +39,7 @@ export class ApiGenericProvider {
   constructor(protected serviceEndpoint: string, protected http: HttpClient) {
     this.headers = {};
     this.headers[API_CONSTANTS.CONTENT_TYPE] = API_CONSTANTS.JSON;
-    this.url =`http://www.trollbackend.com/api/v1/${serviceEndpoint}`;
+    this.url =`${BACKEND_CONFIG.BASE_URL}${serviceEndpoint}`;
   }
 
   /**
@@ -55,7 +55,7 @@ export class ApiGenericProvider {
         timeout(10000),
         catchError((err) => this.handleError(err))
       );
-      await lastValueFrom(response);
+      return await lastValueFrom(response);
   }
 
   /**
@@ -72,7 +72,7 @@ export class ApiGenericProvider {
         timeout(10000),
         catchError((err) => this.handleError(err))
       );
-      await lastValueFrom(response);
+      return await lastValueFrom(response);
   }
 
   /**
@@ -89,7 +89,7 @@ export class ApiGenericProvider {
         timeout(10000),
         catchError((err) => this.handleError(err))
       );
-      await lastValueFrom(response);
+      return await lastValueFrom(response);
   }
 
   /**
@@ -105,7 +105,7 @@ export class ApiGenericProvider {
         timeout(10000),
         catchError((err) => this.handleError(err))
       );
-      await lastValueFrom(response);
+      return await lastValueFrom(response);
   }
 
   /**
