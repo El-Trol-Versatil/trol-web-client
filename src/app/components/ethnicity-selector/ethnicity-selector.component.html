@@ -1,7 +1,7 @@
 <ion-list>
-  <ion-label position="stacked">Ethnicity</ion-label>
+  <ion-label position="stacked">Ethnicity (disabled feature)</ion-label>
   <ion-item *ngFor="let entry of form, let i = index">
     <ion-label>{{entry.text}}</ion-label>
-    <ion-checkbox slot="end" [(ngModel)]="entry.isChecked" (ionChange)="onFormChange(i)"></ion-checkbox>
+    <ion-checkbox slot="end" disabled [(ngModel)]="entry.isChecked" (ionChange)="onFormChange(i)"></ion-checkbox>
   </ion-item>
 </ion-list>

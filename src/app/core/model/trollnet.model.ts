@@ -7,9 +7,21 @@ export interface TrollnetModel {
    */
   id: string;
   /**
-   * Status (active or not).
+   * active or not
    */
   isActive: Boolean;
+  /**
+   * Status of its training
+   */
+  status: string;
+  /**
+   * When was it last trained
+   */
+  lastTrained: Date;
+  /**
+   * List of bots in the trollnet
+   */
+  botList: Array<string>;
   /**
    * list of things in the room.
    */
@@ -28,27 +40,35 @@ export interface TrollnetDraftModel {
   /**
    * genders
    */
-  genders: MultipleValuesModel;
+  genders: MultipleStringsModel;
   /**
    * age interval
    */
-  ageInterval: AgeIntervalModel;
+  ageInterval: NumberIntervalModel;
   /**
    * ethnicity
    */
-  ethnicity: MultipleValuesModel;
+  ethnicity: MultipleStringsModel;
   /**
    * cultural level
    */
-  culturalLevel: SingleValueModel;
+  culturalLevel: NumberIntervalModel;
   /**
    * mood level
    */
-  moodLevel: SingleValueModel;
+  moodLevel: NumberIntervalModel;
   /**
    * keywords
    */
-  keywords: MultipleValuesModel;
+  keywords: MultipleStringsModel;
+  /**
+   * likes
+   */
+  likes: MultipleStringsModel;
+  /**
+   * dislikes
+   */
+  dislikes: MultipleStringsModel;
   /**
    * net size
    */
@@ -79,22 +99,22 @@ export interface SingleValueModel {
 /**
  * Model of field that contains multiple values.
  */
-export interface MultipleValuesModel {
+export interface MultipleStringsModel {
 
   /**
    * array of values.
    */
-  values: Array<any>;
+  values: Array<string>;
 
 }
 
 /**
- * Model of age interval.
+ * Model of number interval.
  */
-export interface AgeIntervalModel {
+export interface NumberIntervalModel {
 
   /**
-   * interval with age values.
+   * interval with number values.
    */
   values: IntegerInterval;
 }

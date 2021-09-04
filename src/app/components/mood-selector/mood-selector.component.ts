@@ -9,20 +9,21 @@ export class MoodSelectorComponent {
 
   @Input() set moodLevelInput(moodLevel: any) {
     this.aggressivityLevel = moodLevel;
-    this.updateForm(moodLevel.value);
+    this.updateForm(moodLevel.values);
   };
 
-  public aggressivityLevel: any;
-  public rangeValue: number;
+  public dualRange: any;
+  private aggressivityLevel: any;
 
   constructor() {
+    this.dualRange = {};
   }
 
   onRangeChange() {
-    this.aggressivityLevel.value = this.rangeValue;
+    this.aggressivityLevel.values = {...this.dualRange};
   }
 
-  updateForm(value: number) {
-    this.rangeValue = value;
+  updateForm(values: number[]) {
+    this.dualRange = {...values};
   }
 }

@@ -1,11 +1,11 @@
 <ion-list>
-  <ion-label position="stacked">Speech aggressivity</ion-label>
-  <ion-range min="-3" max="3" step="1"
-    snaps="true" ticks="false" pin="true"
-    [(ngModel)]="rangeValue" (ionChange)="onRangeChange()">
-    <ion-icon slot="start" size="large" color="success" name="happy-outline"></ion-icon>
-    <ion-label slot="start" color="success" >-3</ion-label>
-    <ion-label slot="end" color="danger">+3</ion-label>
-    <ion-icon slot="end" size="large" color="danger" name="sad-outline"></ion-icon>
+  <ion-label position="stacked">Speech positivity</ion-label>
+  <ion-range min="-3" max="+3" step="1"
+    snaps="true" ticks="false" pin="true" dualKnobs="true"
+    [(ngModel)]="dualRange" (ionChange)="onRangeChange()">
+    <ion-icon slot="start" size="large" color="danger" name="sad-outline"></ion-icon>
+    <ion-label slot="start" color="danger">-3</ion-label>
+    <ion-label slot="end" color="success">+3</ion-label>
+    <ion-icon slot="end" size="large" color="success" name="happy-outline"></ion-icon>
   </ion-range>
 </ion-list>

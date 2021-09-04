@@ -13,8 +13,8 @@ export class GenderSelectorComponent {
   };
 
   public form = [
-    { value: 1, text: 'Male', isChecked: false },
-    { value: 2, text: 'Female', isChecked: false }
+    { value: '1', text: 'Male', isChecked: false },
+    { value: '2', text: 'Female', isChecked: false }
   ];
 
   private genderValues: any;

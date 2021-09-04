@@ -133,72 +133,43 @@ export class TrollnetService extends ApiGenericProvider {
         id: '11111',
         isActive: false,
         properties: {
-          customName: 'Fans de Tokio',
+          customName: 'Troles que saben de todo',
           genders: {
-            values: [1, 2]
+            values: ['1', '2']
           },
           ageInterval: {
             values: {lower: 18, upper: 55}
           },
           ethnicity: {
-            values: [3, 4]
+            values: ['3', '4']
           },
           culturalLevel: {
-            value: 3
+            values: {lower: 1, upper: 2}
           },
           moodLevel: {
-            value: -2
+            values: {lower: -2, upper: 2}
           },
           keywords: {
-            values: ['Tokio', 'La Casa de Papel', 'El Árbol De La Sangre']
+            values: ['música', 'medios de transporte', 'fútbol', 'comida', 'política', 'viajes']
+          },
+          likes: {
+            values: ['Beethoven', 'carne', 'Real Madrid', 'coches', 'derecha', 'playa']
+          },
+          dislikes: {
+            values: ['Mozart', 'pescado', 'Barcelona', 'motos', 'izquierda', 'montaña']
           },
           netsize: {
-            value: 25
+            value: 15
           },
           interactionLevel: {
-            value: 3
+            values: {lower: 2, upper: 3}
           },
-          targetSelection: {
-            profileValues: ['ursulolita', 'lacasadepapel'],
-            hashtagValues: ['LaCasaDePapel', 'LCDP4', 'LCDP4', 'MoneyHeist']
-          }
+          // targetSelection: {
+          //   profileValues: ['ursulolita', 'lacasadepapel'],
+          //   hashtagValues: ['LaCasaDePapel', 'LCDP4', 'LCDP4', 'MoneyHeist']
+          // }
         }
-      },
-      {
-        id: '55555',
-        isActive: true,
-        properties: {
-          customName: 'Ultras Madrid',
-          genders: {
-            values: [2]
-          },
-          ageInterval: {
-            values: {lower: 25, upper: 35}
-          },
-          ethnicity: {
-            values: [3, 4]
-          },
-          culturalLevel: {
-            value: 2
-          },
-          moodLevel: {
-            value: 1
-          },
-          keywords: {
-            values: ['Football', 'Real Madrid', 'Ultra']
-          },
-          netsize: {
-            value: 10
-          },
-          interactionLevel: {
-            value: 2
-          },
-          targetSelection: {
-            profileValues: ['realmadrid', 'FondoSur_1980', 'RMadridistaReal'],
-            hashtagValues: ['RealMadrid', 'HalaMadrid', 'SiempreFieles', 'UltrasSur']
-          }
-        }
-      },
+      }
     ];
     return trollnetList;
   }

@@ -47,19 +47,25 @@ export class CreatePage implements OnInit {
         values: []
       },
       culturalLevel: {
-        value: 0
+        values: {lower: 0, upper: 2}
       },
       moodLevel: {
-        value: 0
+        values: {lower: -2, upper: 2}
       },
       keywords: {
+        values: []
+      },
+      likes: {
+        values: []
+      },
+      dislikes: {
         values: []
       },
       netsize: {
         value: 5
       },
       interactionLevel: {
-        value: 1
+        values: {lower: 1, upper: 5}
       },
       targetSelection: {
         profileValues: [],
@@ -72,28 +78,34 @@ export class CreatePage implements OnInit {
     this.draftNet = {
       customName: 'Ultras Madrid',
       genders: {
-        values: [2]
+        values: ['2']
       },
       ageInterval: {
         values: {lower: 25, upper: 35}
       },
       ethnicity: {
-        values: [3, 4]
+        values: ['3', '4']
       },
       culturalLevel: {
-        value: 2
+        values: {lower: 0, upper: 1}
       },
       moodLevel: {
-        value: 1
+        values: {lower: -3, upper: 3}
       },
       keywords: {
-        values: ['Football', 'Real Madrid', 'Ultra']
+        values: ['Football', 'Sé de esto1', 'Sé de esto2', 'Sé de esto3', 'Sé de esto4', 'Sé de esto5', 'Sé de esto6']
+      },
+      likes: {
+        values: ['Real Madrid', 'Megusta1', 'Megusta2', 'Megusta3', 'Megusta4', 'Megusta5', 'Megusta6']
+      },
+      dislikes: {
+        values: ['Barcelona', 'Odio1', 'Odio2', 'Odio3', 'Odio4', 'Odio5', 'Odio6', 'Odio7']
       },
       netsize: {
-        value: 10
+        value: 15
       },
       interactionLevel: {
-        value: 2
+        values: {lower: 2, upper: 4}
       },
       targetSelection: {
         profileValues: ['realmadrid', 'FondoSur_1980', 'RMadridistaReal'],

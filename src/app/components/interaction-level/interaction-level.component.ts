@@ -9,20 +9,23 @@ export class InteractionLevelComponent {
 
   @Input() set interactionLevelInput(interactionLevel: any) {
     this.interactionValues = interactionLevel;
-    this.updateForm(interactionLevel.value);
+    this.updateForm(interactionLevel.values);
   };
 
-  public interactionLevel: number;
+  public dualRange: any;
   private interactionValues: any;
+  public lowerValue: number;
+  public upperValue: number;
 
   constructor() {
-  }
-
-  updateForm(value: number) {
-    this.interactionLevel = value;
+    this.dualRange = {};
   }
 
   onRangeChange() {
-    this.interactionValues.value = this.interactionLevel;
+    this.interactionValues.values = {...this.dualRange};
+  }
+
+  updateForm(values: number[]) {
+    this.dualRange = {...values};
   }
 }

@@ -13,10 +13,10 @@ export class EthnicitySelectorComponent {
   };
 
   public form = [
-    { value: 1, text: 'Asian', isChecked: false },
-    { value: 2, text: 'Black', isChecked: false },
-    { value: 3, text: 'Latino', isChecked: false },
-    { value: 4, text: 'White', isChecked: false },
+    { value: '1', text: 'Asian', isChecked: false },
+    { value: '2', text: 'Black', isChecked: false },
+    { value: '3', text: 'Latino', isChecked: false },
+    { value: '4', text: 'White', isChecked: false },
   ];
 
   private ethnicityValues: any;

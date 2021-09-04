@@ -25,7 +25,7 @@ export class AgeSelectorComponent {
     this.ageRange.values = {...this.dualRange};
   }
 
-  updateForm(values: any) {
+  updateForm(values: number[]) {
     this.dualRange = {...values};
   }
 }

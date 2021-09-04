@@ -14,6 +14,15 @@ export class KeywordsComponent implements OnInit {
     this.updateForm(keywords.values);
   };
 
+  /**
+   * The subtitle that describes what is this keywords component for.
+   */
+  @Input() public subtitle: string;
+  /**
+   * The color associated to what this keywords component is for.
+   */
+  @Input() public keywordsColor: string;
+
   public keywordInput: String;
   public keywordsValues: any;
   public keywordsList: String[];
@@ -42,6 +51,7 @@ export class KeywordsComponent implements OnInit {
     if (this.keywordInput) {
       this.keywordsList.push(this.keywordInput);
       this.keywordInput = undefined;
+      this.keywordsValues.values = this.keywordsList;
     }
   }
 
@@ -49,5 +59,6 @@ export class KeywordsComponent implements OnInit {
     this.keywordsList.forEach((element, index) => {
       element === keyword && this.keywordsList.splice(index, 1);
     });
+    this.keywordsValues.values = this.keywordsList;
   }
 }
