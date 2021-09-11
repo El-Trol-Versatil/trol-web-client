@@ -76,12 +76,11 @@ export interface TrollnetDraftModel {
   /**
    * interaction level
    */
-  interactionLevel: SingleValueModel;
-  /**
-   * target selection
-   */
-  targetSelection: TargetSelectionModel;
-
+  interactionLevel: NumberIntervalModel;
+  // /**
+  //  * target selection. TODO: Still need to see what do we do here
+  //  */
+  // targetSelection: TargetSelectionModel;
 }
 
 /**

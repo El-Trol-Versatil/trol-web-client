@@ -1,4 +1,4 @@
-<ion-card style="margin: 4px;" (click)="editTrollnet()">
+ <ion-card style="margin: 4px;" (click)="editTrollnet()">
   <div class="trollnet-image-background">
     <div class="trollnet-display"
       [ngClass]="{'activated': actuallyActivated}">
@@ -9,7 +9,7 @@
         <ion-toggle
           toggle-class="toggle-energized"
           [(ngModel)]="activeStatusOn"
-          (ngModelChange)="toggleTrollnetActiveStatus($event)"
+          (ngModelChange)="handleActivationToggle($event)"
           [disabled]="interactionDisabled">
         </ion-toggle>
       </ion-row>

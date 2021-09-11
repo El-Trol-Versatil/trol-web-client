@@ -96,10 +96,11 @@ export class TrollnetService extends ApiGenericProvider {
   /**
    * Function that activates a trollnet.
    * @param trollnetId Trollnet id.
+   * @param mainThread Main thread for the trollnet to talk about.
    */
-  public activateTrollnet(trollnetId: string): Promise<any> {
+  public activateTrollnet(trollnetId: string, mainThread: string): Promise<any> {
     let promise = new Promise<any>((resolve, reject) => {
-      this.update('/activate', {isActive: true}, trollnetId).then(
+      this.update('/activate', {isActive: true, mainThread: mainThread}, trollnetId).then(
         response => {
           resolve(response);
         }, (error) => {
@@ -132,6 +133,9 @@ export class TrollnetService extends ApiGenericProvider {
       {
         id: '11111',
         isActive: false,
+        status: 'READY',
+        lastTrained: new Date(),
+        botList: ['fakebot1', 'fakebot2', 'fakebot3'],
         properties: {
           customName: 'Troles que saben de todo',
           genders: {

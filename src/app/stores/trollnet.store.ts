@@ -127,9 +127,9 @@ export class TrollnetStore {
     return promise;
   }
 
-  public activateTrollnet(trollnet: TrollnetModel): Promise<any> {
+  public activateTrollnet(trollnet: TrollnetModel, targetThread: string): Promise<any> {
     const promise: Promise<any> = new Promise((resolve, reject) => {
-      this.trollnetService.activateTrollnet(trollnet.id).then(
+      this.trollnetService.activateTrollnet(trollnet.id, targetThread).then(
         () => {
           trollnet.isActive = true;
           return this.trollnetDB.set(trollnet.id, trollnet)

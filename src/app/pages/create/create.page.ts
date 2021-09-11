@@ -4,8 +4,6 @@ import { TrollnetStore } from '../../stores/trollnet.store';
 import { LoadingService } from '../../services/loading.service';
 import { ToastService } from '../../services/toast.service';
 import { AlertService } from '../../services/alert.service';
-import { StorageService } from '../../services/storage.service';
-import { TrollnetService } from '../../api/trollnet.service';
 
 import { TrollnetDraftModel } from '../../core/model/trollnet.model';
 
@@ -22,12 +20,11 @@ export class CreatePage implements OnInit {
    * Trollnet creation page constructor.
    * @param trollnetStore Store for handling trollnets
    * @param loadingService Service used to generate a loading dialog
-   * @param alertService Service used to show toasts
-   * @param storageService Service used to show toasts
-   * @param trollnetApiService Service used to show toasts
+   * @param toastService Service used to show toasts
+   * @param alertService Service used to show alerts
    */
     constructor(private trollnetStore: TrollnetStore, private loadingService: LoadingService, private toastService: ToastService,
-      private alertService: AlertService, private storageService: StorageService, private trollnetApiService: TrollnetService) {
+      private alertService: AlertService) {
     }
 
   ngOnInit() {
@@ -36,7 +33,7 @@ export class CreatePage implements OnInit {
 
   setNewDraft(): void {
     this.draftNet = {
-      customName: 'New Trollnet',
+      customName: 'My New Trollnet',
       genders: {
         values: []
       },
@@ -67,10 +64,10 @@ export class CreatePage implements OnInit {
       interactionLevel: {
         values: {lower: 1, upper: 5}
       },
-      targetSelection: {
-        profileValues: [],
-        hashtagValues: []
-      }
+      // targetSelection: {
+      //   profileValues: [],
+      //   hashtagValues: []
+      // }
     };
   }
 
@@ -107,14 +104,14 @@ export class CreatePage implements OnInit {
       interactionLevel: {
         values: {lower: 2, upper: 4}
       },
-      targetSelection: {
-        profileValues: ['realmadrid', 'FondoSur_1980', 'RMadridistaReal'],
-        hashtagValues: ['RealMadrid', 'HalaMadrid', 'SiempreFieles', 'UltrasSur']
-      }
+      // targetSelection: {
+      //   profileValues: ['realmadrid', 'FondoSur_1980', 'RMadridistaReal'],
+      //   hashtagValues: ['RealMadrid', 'HalaMadrid', 'SiempreFieles', 'UltrasSur']
+      // }
     };
   }
 
-  nameItAndCreateNet(): void {
+  editName(): void {
     this.alertService.showAlert({
       header: 'Give it a name!',
       message: `You will identify your trollnet by this name.`,
@@ -131,9 +128,26 @@ export class CreatePage implements OnInit {
           text: 'Cancel'
         },
         {
-          text: 'Create',
+          text: 'Rename',
           handler: data => {
             this.draftNet.customName = data['name'];
+          }
+        }
+      ]
+    });
+  }
+
+  nameItAndCreateNet(): void {
+    this.alertService.showAlert({
+      header: `You are about to create '${this.draftNet.customName}'...`,
+      message: `You won't be able to change it once it is created.`,
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Create',
+          handler: () => {
             this.createNet();
           }
         }

@@ -6,6 +6,7 @@ import { TrollnetStore } from '../../stores/trollnet.store';
 
 // Services
 import { ToastService } from '../../services/toast.service';
+import { AlertService } from '../../services/alert.service';
 
 // Models
 import { TrollnetModel } from '../../core/model/trollnet.model';
@@ -41,13 +42,19 @@ export class TrollnetPreviewComponent {
    * Flag for the active status toggle.
    */
   public activeStatusOn: boolean;
+  /**
+   * Text for the target thread to talk about.
+   */
+  public targetThread: string;
 
   /**
    * Constructor to declare all the necesary to initialize the class.
    * @param trollnetStore Store for handling trollnets
-   * @param toastService Service used to show toasts.
+   * @param toastService Service used to show toasts
+   * @param alertService Service used to show alerts
    */
-  constructor(private trollnetStore: TrollnetStore, private toastService: ToastService) {
+  constructor(private trollnetStore: TrollnetStore, private toastService: ToastService, private alertService: AlertService) {
+    this.targetThread = 'Hello world';
   }
 
   /**
@@ -59,37 +66,66 @@ export class TrollnetPreviewComponent {
   }
 
   /**
-   * Requests light power changes depending on the manual toggle of the main light button.
    * @param event 
    */
-  public toggleTrollnetActiveStatus(event: any) {
+  public handleActivationToggle(event: any) {
     this.interactionDisabled = true;
     if (this.activeStatusOn) {
-      this.trollnetStore.activateTrollnet(this.trollnet).then(
-        () => {
-          this.actuallyActivated = true;
-          this.interactionDisabled = false;
-        }, (error) => {
-          this.toastService.showToast({message: `Failed to activate trollnet ${this.trollnet.properties.customName}`});
-          this.activeStatusOn = false;
-          this.interactionDisabled = false;
-        });
+      this.alertService.showAlert({
+        header: 'Introduce the thread about which your trollnet will talk!',
+        message: `This could be for example somebody's tweet.`,
+        inputs: [
+          {
+            id: 'thread',
+            name: 'thread',
+            placeholder: 'I like Christmas.',
+            value: this.targetThread,
+          },
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            handler: () => {
+              this.activeStatusOn = false;
+              this.interactionDisabled = false;
+            }
+          },
+          {
+            text: 'Generate conversation',
+            handler: data => {
+              this.targetThread = data['thread'];
+              this.activateTrollnet();
+            }
+          }
+        ]
+      });
     } else {
-      this.trollnetStore.deactivateTrollnet(this.trollnet).then(
-        () => {
-          this.actuallyActivated = false;
-          this.interactionDisabled = false;
-        }, (error) => {
-          this.toastService.showToast({message: `Failed to deactivate trollnet ${this.trollnet.properties.customName}`});
-          this.activeStatusOn = true;
-          this.interactionDisabled = false;
-        });
+      this.deactivateTrollnet();
     }
   }
 
-  public editTrollnet(): void {
-    // if (!this.interactionDisabled) {
-    //   this.navigationService.goTo('page-edit', { trollnetId: this.trollnet.id });
-    // }
+  public activateTrollnet() {
+    this.trollnetStore.activateTrollnet(this.trollnet, this.targetThread).then(
+      () => {
+        this.actuallyActivated = true;
+        this.interactionDisabled = false;
+      }, (error) => {
+        this.toastService.showToast({message: `Failed to activate trollnet ${this.trollnet.properties.customName}`});
+        this.activeStatusOn = false;
+        this.interactionDisabled = false;
+    });
   }
+
+  public deactivateTrollnet() {
+    this.trollnetStore.deactivateTrollnet(this.trollnet).then(
+      () => {
+        this.actuallyActivated = false;
+        this.interactionDisabled = false;
+      }, (error) => {
+        this.toastService.showToast({message: `Failed to deactivate trollnet ${this.trollnet.properties.customName}`});
+        this.activeStatusOn = true;
+        this.interactionDisabled = false;
+    });
+  }
+  
 }

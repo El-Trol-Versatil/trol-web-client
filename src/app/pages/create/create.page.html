@@ -1,6 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>create</ion-title>
+    <ion-item>
+      <ion-button color="secondary" (click)="editName()">
+        <ion-icon size="large" name="create-outline"></ion-icon>
+      </ion-button>
+      <ion-title>{{draftNet.customName || 'New trollnet name'}}</ion-title>
+    </ion-item>
   </ion-toolbar>
 </ion-header>
 
