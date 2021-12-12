@@ -30,6 +30,10 @@ export interface TrollnetModel {
    * list of things in the room.
    */
   properties: TrollnetDraftModel;
+  /**
+   * flag to register the last error that happened in any related progress
+   */
+   error: any;
 }
 
 /**

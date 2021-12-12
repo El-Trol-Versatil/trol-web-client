@@ -190,7 +190,8 @@ export class TrollnetService extends ApiGenericProvider {
           //   profileValues: ['ursulolita', 'lacasadepapel'],
           //   hashtagValues: ['LaCasaDePapel', 'LCDP4', 'LCDP4', 'MoneyHeist']
           // }
-        }
+        },
+        error: null,
       }
     ];
     return trollnetList;
