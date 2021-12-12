@@ -9,11 +9,15 @@ export interface TrollnetModel {
   /**
    * active or not
    */
-  isActive: Boolean;
+  isActive: boolean;
   /**
-   * Status of its training
+   * Progress of its creation
    */
-  status: string;
+  creationStatus: number;
+  /**
+   * Progress of its training
+   */
+  trainingStatus: number;
   /**
    * When was it last trained
    */
@@ -125,11 +129,11 @@ export interface IntegerInterval {
   /**
    * lower integer.
    */
-  lower: Number;
+  lower: number;
   /**
    * upper integer.
    */
-  upper: Number;
+  upper: number;
 
 }
 
@@ -146,5 +150,19 @@ export interface TargetSelectionModel {
    * hashtag values.
    */
   hashtagValues: Array<string>;
+
+}
+
+/**
+ * TrollnetModel namespace.
+ */
+ export namespace TrollnetModel {
+
+  export const CREATION_FAILED: number = -1;
+  export const CREATED: number = 100;
+
+  export const TRAINING_FAILED: number = -1;
+  export const UNTRAINED: number = 0;
+  export const TRAINED: number = 100;
 
 }

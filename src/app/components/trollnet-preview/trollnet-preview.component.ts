@@ -24,6 +24,7 @@ export class TrollnetPreviewComponent {
     this.interactionDisabled = true;
     this.trollnet = trollnet;
     this.updateActiveStatus();
+    this.updateProgressBars();
     this.interactionDisabled = false;
   };
   /**
@@ -43,9 +44,17 @@ export class TrollnetPreviewComponent {
    */
   public activeStatusOn: boolean;
   /**
-   * Text for the target thread to talk about.
+   * Number that indicates the completed percentage of the creation progress. 
    */
-  public targetThread: string;
+  public creationProgress: number;
+  /**
+   * Number that indicates the completed percentage of the training progress. 
+   */
+   public trainingProgress: number;
+  /**
+   * Text for the target account to talk with.
+   */
+  public targetAccount: string;
 
   /**
    * Constructor to declare all the necesary to initialize the class.
@@ -54,7 +63,7 @@ export class TrollnetPreviewComponent {
    * @param alertService Service used to show alerts
    */
   constructor(private trollnetStore: TrollnetStore, private toastService: ToastService, private alertService: AlertService) {
-    this.targetThread = 'Hello world';
+    this.targetAccount = 'kike_remo';
   }
 
   /**
@@ -66,20 +75,28 @@ export class TrollnetPreviewComponent {
   }
 
   /**
+   * Update creation and training progress bars.
+   */
+  public updateProgressBars() {
+    this.creationProgress = this.trollnet.creationStatus/100;
+    this.trainingProgress = this.trollnet.trainingStatus/100;
+  }
+
+  /**
    * @param event 
    */
   public handleActivationToggle(event: any) {
     this.interactionDisabled = true;
     if (this.activeStatusOn) {
       this.alertService.showAlert({
-        header: 'Introduce the thread about which your trollnet will talk!',
-        message: `This could be for example somebody's tweet.`,
+        header: 'Introduce the Twitter account with which your trollnet will interact!',
+        message: `This could be for example your Twitter account.`,
         inputs: [
           {
-            id: 'thread',
-            name: 'thread',
-            placeholder: 'I like Christmas.',
-            value: this.targetThread,
+            id: 'twitterAccount',
+            name: 'twitterAccount',
+            placeholder: 'kike_remo',
+            value: this.targetAccount,
           },
         ],
         buttons: [
@@ -91,9 +108,9 @@ export class TrollnetPreviewComponent {
             }
           },
           {
-            text: 'Generate conversation',
+            text: 'Troll that profile',
             handler: data => {
-              this.targetThread = data['thread'];
+              this.targetAccount = data['twitterAccount'];
               this.activateTrollnet();
             }
           }
@@ -104,8 +121,60 @@ export class TrollnetPreviewComponent {
     }
   }
 
+  editName(): void {
+    this.alertService.showAlert({
+      header: 'Rename this trollnet:',
+      inputs: [
+        {
+          id: 'name',
+          name: 'name',
+          placeholder: 'New trollnet name',
+          value: this.trollnet.properties.customName,
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Rename',
+          handler: data => {
+            this.renameTrollnet(data['name']);
+          }
+        }
+      ]
+    });
+  }
+
+  delete(): void {
+    this.alertService.showAlert({
+      header: `You will delete the trollnet ${this.trollnet.properties.customName}`,
+      message: 'This action cannot be reverted.',
+
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Delete',
+          handler: data => {
+            this.deleteTrollnet();
+          }
+        }
+      ]
+    });
+  }
+
+  public renameTrollnet(newName: string) {
+    this.trollnetStore.renameTrollnet(this.trollnet, newName).then(
+      () => {
+      }, (error) => {
+        this.toastService.showToast({message: `Failed to rename trollnet ${this.trollnet.properties.customName}`});
+    });
+  }
+
   public activateTrollnet() {
-    this.trollnetStore.activateTrollnet(this.trollnet, this.targetThread).then(
+    this.trollnetStore.activateTrollnet(this.trollnet, this.targetAccount).then(
       () => {
         this.actuallyActivated = true;
         this.interactionDisabled = false;
@@ -128,4 +197,12 @@ export class TrollnetPreviewComponent {
     });
   }
   
+  public deleteTrollnet() {
+    this.trollnetStore.deleteTrollnet(this.trollnet.id).then(
+      () => {
+        this.toastService.showToast({message: `Trollnet ${this.trollnet.properties.customName} deleted`});
+      }, (error) => {
+        this.toastService.showToast({message: `Failed to delete trollnet ${this.trollnet.properties.customName}`});
+    });
+  }
 }

@@ -1,43 +1,7 @@
 trollnet-preview {
-  .trollnet-image-background {
-    background-repeat: no-repeat;
-    background-origin: center;
-    background-size: cover; 
-    background-position: center;
-    div {
-      height: 150px; 
-    }
-    .trollnet-display {
-      background: linear-gradient(to bottom, transparent -125%, $black 125%); 
-      color: $light_blue;
-      .trollnet-icon {
-        position: absolute;
-        top: 5%;
-        left: 6%;
-        font-size: 1.8em;
-        width: 100%;
-        font-weight: bold;
-      }
-      .trollnet-title {
-        position: absolute;
-        top: 10%;
-        left: 25%;
-        font-size: 1.2em;
-        width: 100%;
-        font-weight: bold;
-      }
-      .activeStatus {
-      }
-      .info1 {
-        font-size: 1.4em;
-      }
-      .info2 {
-        font-size: 1.4em;
-      }
-    }
-    .activated {
-      background: linear-gradient(to bottom, transparent -50%, white 150%);
-      color: $blue_10;
-    }
+  .activeStatus {
+  }
+  .activated {
+    background: linear-gradient(to bottom, transparent -50%, green 150%);
   }
 }

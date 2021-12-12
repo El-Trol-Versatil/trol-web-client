@@ -76,6 +76,23 @@ export class TrollnetService extends ApiGenericProvider {
   }
 
   /**
+   * Function that gets the status of untrained trollnets.
+   * @return List of all trollnets.
+   */
+   public getUntrainedStatus(untrainedIdList: string[]): Promise<any[]> {
+    let promise = new Promise<any[]>((resolve, reject) => {
+      this.create('/status', { untrainedIdList }).then(
+        (response: any[]) => {
+          resolve(response);
+        }, (error) => {
+          reject(error);
+        }
+      );
+    });
+    return promise;
+  }
+
+  /**
    * Function that renames a trollnet.
    * @param trollnetId Trollnet id.
    * @param newName New name for the trollnet.
@@ -96,11 +113,11 @@ export class TrollnetService extends ApiGenericProvider {
   /**
    * Function that activates a trollnet.
    * @param trollnetId Trollnet id.
-   * @param mainThread Main thread for the trollnet to talk about.
+   * @param targetAccount Target account for the trollnet to talk with.
    */
-  public activateTrollnet(trollnetId: string, mainThread: string): Promise<any> {
+  public activateTrollnet(trollnetId: string, targetAccount: string): Promise<any> {
     let promise = new Promise<any>((resolve, reject) => {
-      this.update('/activate', {isActive: true, mainThread: mainThread}, trollnetId).then(
+      this.update('/activate', {isActive: true, targetAccount: targetAccount}, trollnetId).then(
         response => {
           resolve(response);
         }, (error) => {
@@ -133,7 +150,8 @@ export class TrollnetService extends ApiGenericProvider {
       {
         id: '11111',
         isActive: false,
-        status: 'READY',
+        creationStatus: 100,
+        trainingStatus: 100,
         lastTrained: new Date(),
         botList: ['fakebot1', 'fakebot2', 'fakebot3'],
         properties: {

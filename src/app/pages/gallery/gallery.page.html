@@ -8,7 +8,7 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col col-12 col-md-6 col-lg-6 *ngFor="let trollnet of retrievedTrollnets">
+      <ion-col size="6" *ngFor="let trollnet of retrievedTrollnets">
         <trollnet-preview [trollnetInfo]="trollnet"></trollnet-preview>
       </ion-col>
     </ion-row>

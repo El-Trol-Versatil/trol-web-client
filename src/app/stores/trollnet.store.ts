@@ -10,6 +10,10 @@ import { TrollnetService } from '../api/trollnet.service';
 // Models
 import { TrollnetModel, TrollnetDraftModel } from '../core/model/trollnet.model';
 
+// Models
+import { TROLLNET_CONSTANTS } from '../core/constants/trollnet.constants';
+
+
 /**
  * Store to handle trollnets.
  */
@@ -27,6 +31,11 @@ export class TrollnetStore {
   private _currentTrollnets: TrollnetModel[];
 
   /**
+   * 
+   */
+   private _pollingStatusInterval: any;
+
+  /**
    * Constructor to declare all the necesary to initialize the class.
    * @param trollnetDB Trollnet database service
    * @param trollnetService Api trollnet service
@@ -34,29 +43,37 @@ export class TrollnetStore {
   constructor(private trollnetDB: TrollnetDatabaseService, private trollnetService: TrollnetService) {
     this._currentTrollnetsObservable = new BehaviorSubject<TrollnetModel[]>([]);
     this._currentTrollnets = [];
-    this._synchronizeData();
+    this._synchronizeData().then(() => {
+      this._startPollingStatus();
+    });
   }
 
   /**
    * Synchronize data with the remote changes in trollnets
    */
-  private _synchronizeData(): void {
-    const promiseArray: Promise<any>[] = [];
+  private _synchronizeData(): Promise<any> {
     // Get all trollnets from remote service
-    this.trollnetService.getAllTrollnets().then((trollnets: TrollnetModel[]) => {
-      // Save each trollnet into the DB
-      trollnets.forEach(trollnet => promiseArray.push(this.trollnetDB.set(trollnet.id, trollnet)));
-      Promise.all(promiseArray).then(
-        () => this.refreshList(),
-        (error) => console.error(this, `FAILED Set Trollnet into DB. ` + error)
-      );
+    return this.trollnetService.getAllTrollnets().then((trollnets: TrollnetModel[]) => {
+      return this._saveTrollnetsIntoDB(trollnets);
     }, (error) => console.error(this, `FAILED Get All Trollnets from API. ` + error));
+
+  }
+
+  /**
+   *Save trollnets into the DB and refresh list
+   */
+  private _saveTrollnetsIntoDB(trollnets): Promise<any> {
+    const promiseArray: Promise<any>[] = [];
+    trollnets.forEach(trollnet => promiseArray.push(this.trollnetDB.set(trollnet.id, trollnet)));
+    return Promise.all(promiseArray).then(() => {
+      return this._refreshList();
+    }, (error) => console.error(this, `FAILED Set Trollnet into DB. ` + error));
   }
 
   /**
    * Retrieve the last DB values and set it as the current trollnets
    */
-  private refreshList(): Promise<any> {
+  private _refreshList(): Promise<any> {
     return this.trollnetDB.getAll().then((trollnets: TrollnetModel[]) => {
       this._currentTrollnets = trollnets;
       this._currentTrollnetsObservable.next(this._currentTrollnets);
@@ -82,11 +99,43 @@ export class TrollnetStore {
     return this._currentTrollnetsObservable.asObservable().pipe(share());
   }
 
-  public createNewTrollnet(trollnetDraft: TrollnetDraftModel): Promise<any> {
-    const promise: Promise<any> = new Promise((resolve, reject) => {
+  private _startPollingStatus(): void {
+    !!this._pollingStatusInterval && this._stopPollingStatus();
+    this._pollingStatusInterval = setInterval(() => {
+      this._pollStatus();
+    }, TROLLNET_CONSTANTS.STATUS_POLLING_INTERVAL_TIME)
+  }
+
+  private _stopPollingStatus(): void {
+    clearInterval(this._pollingStatusInterval);
+  }
+
+  private _pollStatus(): void {
+    const untrainedTrollnets: TrollnetModel[] = this._currentTrollnets.filter((element) => {
+      return element.trainingStatus !== TrollnetModel.TRAINED;
+    });
+    const untrainedIdList: string[] = untrainedTrollnets.map(function(trollnet) {return trollnet.id});
+    if (untrainedIdList.length !== 0) {
+      // Get untrained trollnets status info from remote service
+      this.trollnetService.getUntrainedStatus(untrainedIdList).then((trollnetsStatus: any[]) => {
+        // Update _currentTrollnets with it
+        trollnetsStatus.forEach(trollnetStatus => {
+          const trollnetToUpdate = this._currentTrollnets.find((trollnet: TrollnetModel) => {
+            return trollnet.id === trollnetStatus.id;
+          });
+          trollnetToUpdate.creationStatus = trollnetStatus.creationStatus;
+          trollnetToUpdate.trainingStatus = trollnetStatus.trainingStatus;
+        });
+        this._saveTrollnetsIntoDB(this._currentTrollnets);
+      }, (error) => console.error(this, `FAILED Get Untrained Trollnets from API. ` + error));
+    }
+  }
+
+  public createNewTrollnet(trollnetDraft: TrollnetDraftModel): Promise<void> {
+    const promise: Promise<void> = new Promise((resolve, reject) => {
       this.trollnetService.createTrollnet(trollnetDraft)
         .then((trollnet: TrollnetModel) => this.trollnetDB.set(trollnet.id, trollnet))
-        .then(() => this.refreshList())
+        .then(() => this._refreshList())
         .then(() => resolve())
         .catch((error) => {
           console.error(this, `FAILED Set Trollnet into DB. ` + error);
@@ -96,11 +145,11 @@ export class TrollnetStore {
     return promise;
   }
 
-  public deleteTrollnet(trollnetId: string): Promise<any> {
-    const promise: Promise<any> = new Promise((resolve, reject) => {
+  public deleteTrollnet(trollnetId: string): Promise<void> {
+    const promise: Promise<void> = new Promise((resolve, reject) => {
       this.trollnetService.deleteTrollnet(trollnetId)
         .then(() => this.trollnetDB.remove(trollnetId))
-        .then(() => this.refreshList())
+        .then(() => this._refreshList())
         .then(() => resolve())
         .catch((error) => {
           console.error(this, `FAILED Process deleteTrollnet. ` + error);
@@ -110,14 +159,14 @@ export class TrollnetStore {
     return promise;
   }
 
-  public renameTrollnet(trollnet: TrollnetModel, newName: string): Promise<any> {
-    const promise: Promise<any> = new Promise((resolve, reject) => {
+  public renameTrollnet(trollnet: TrollnetModel, newName: string): Promise<void> {
+    const promise: Promise<void> = new Promise((resolve, reject) => {
       this.trollnetService.renameTrollnet(trollnet.id, newName).then(
         () => {
           trollnet.properties.customName = newName;
           return this.trollnetDB.set(trollnet.id, trollnet)
         })
-        .then(() => this.refreshList())
+        .then(() => this._refreshList())
         .then(() => resolve())
         .catch((error) => {
           console.error(this, `FAILED Process renameTrollnet. ` + error);
@@ -127,14 +176,14 @@ export class TrollnetStore {
     return promise;
   }
 
-  public activateTrollnet(trollnet: TrollnetModel, targetThread: string): Promise<any> {
-    const promise: Promise<any> = new Promise((resolve, reject) => {
-      this.trollnetService.activateTrollnet(trollnet.id, targetThread).then(
+  public activateTrollnet(trollnet: TrollnetModel, targetAccount: string): Promise<void> {
+    const promise: Promise<void> = new Promise((resolve, reject) => {
+      this.trollnetService.activateTrollnet(trollnet.id, targetAccount).then(
         () => {
           trollnet.isActive = true;
           return this.trollnetDB.set(trollnet.id, trollnet)
         })
-        .then(() => this.refreshList())
+        .then(() => this._refreshList())
         .then(() => resolve())
         .catch((error) => {
           console.error(this, `FAILED Process activateTrollnet. ` + error);
@@ -145,14 +194,14 @@ export class TrollnetStore {
   }
 
 
-  public deactivateTrollnet(trollnet: TrollnetModel): Promise<any> {
-    const promise: Promise<any> = new Promise((resolve, reject) => {
+  public deactivateTrollnet(trollnet: TrollnetModel): Promise<void> {
+    const promise: Promise<void> = new Promise((resolve, reject) => {
       this.trollnetService.deactivateTrollnet(trollnet.id).then(
         () => {
           trollnet.isActive = false;
           return this.trollnetDB.set(trollnet.id, trollnet)
         })
-        .then(() => this.refreshList())
+        .then(() => this._refreshList())
         .then(() => resolve())
         .catch((error) => {
           console.error(this, `FAILED Process deactivateTrollnet. ` + error);
@@ -162,7 +211,7 @@ export class TrollnetStore {
     return promise;
   }
 
-  public cleanUserTrollnets(): Promise<any> {
+  public cleanUserTrollnets(): Promise<void> {
     this._currentTrollnets = [];
     this._currentTrollnetsObservable.next([]);
     return this.trollnetDB.removeAll();
