@@ -27,7 +27,7 @@ export interface TrollnetModel {
    */
   botList: Array<string>;
   /**
-   * list of things in the room.
+   * Specification of the trollnet characteristics
    */
   properties: TrollnetDraftModel;
   /**
